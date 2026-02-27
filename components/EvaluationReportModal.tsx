@@ -1,0 +1,183 @@
+import React from 'react';
+import { EvaluationResult } from '../types';
+
+interface EvaluationReportModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  result: EvaluationResult | null;
+  staticScore: number;
+  staticTips: string[];
+}
+
+const EvaluationReportModal: React.FC<EvaluationReportModalProps> = ({ isOpen, onClose, result, staticScore, staticTips }) => {
+  if (!isOpen) return null;
+
+  const isEvaluated = !!result;
+  const currentTotal = isEvaluated ? result.totalScore : staticScore;
+
+  const getScoreColor = (score: number) => {
+    if (score >= 80) return 'text-emerald-600 bg-emerald-50 border-emerald-200';
+    if (score >= 60) return 'text-orange-600 bg-orange-50 border-orange-200';
+    return 'text-red-600 bg-red-50 border-red-200';
+  };
+
+  const getBarColor = (score: number, max: number) => {
+    const ratio = score / max;
+    if (ratio >= 0.8) return 'bg-emerald-500';
+    if (ratio >= 0.6) return 'bg-orange-500';
+    return 'bg-red-500';
+  };
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm animate-in fade-in duration-200" onClick={onClose}>
+      <div className="bg-white rounded-2xl shadow-2xl w-[800px] max-h-[85vh] flex flex-col overflow-hidden border border-gray-200" onClick={e => e.stopPropagation()}>
+        
+        {/* Header */}
+        <div className="h-16 border-b border-gray-100 flex items-center justify-between px-6 bg-slate-50 shrink-0">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center shadow-sm">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-slate-800 leading-tight">AI 智能评测报告</h2>
+              <p className="text-xs text-slate-500">基于您的配置与最近的对话历史生成</p>
+            </div>
+          </div>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors bg-white p-2 rounded-full shadow-sm border border-gray-100">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+          </button>
+        </div>
+
+        {/* Content */}
+        <div className="flex-1 overflow-y-auto p-8 bg-white grid grid-cols-12 gap-8">
+          
+          {/* Left Column: Score Overview */}
+          <div className="col-span-5 flex flex-col gap-6">
+            <div className={`p-6 rounded-2xl border flex flex-col items-center justify-center text-center shadow-sm ${getScoreColor(currentTotal)}`}>
+              <span className="text-sm font-bold uppercase tracking-widest opacity-80 mb-2">综合得分</span>
+              <div className="flex items-baseline gap-1">
+                <span className="text-6xl font-black tracking-tighter">{currentTotal}</span>
+                <span className="text-xl font-bold opacity-60">/100</span>
+              </div>
+              <p className="text-xs mt-4 opacity-80 font-medium">
+                {isEvaluated 
+                  ? (currentTotal >= 80 ? '表现优异！您的智能体已经可以投入使用了。' : currentTotal >= 60 ? '表现良好，但仍有优化空间。' : '表现欠佳，建议根据右侧建议进行调整。')
+                  : '当前仅包含基础配置得分。请在右侧进行至少 3 轮对话以解锁完整的 AI 深度评测。'
+                }
+              </p>
+            </div>
+
+            <div className="bg-slate-50 rounded-xl p-5 border border-gray-100">
+              <h3 className="text-sm font-bold text-slate-700 mb-4 flex items-center gap-2">
+                <svg className="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+                得分构成
+              </h3>
+              
+              <div className="space-y-4">
+                <div>
+                  <div className="flex justify-between text-xs font-bold text-slate-600 mb-1">
+                    <span>基础配置 (静态)</span>
+                    <span>{isEvaluated ? result.staticScore : staticScore} / 40</span>
+                  </div>
+                  <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
+                    <div className={`h-full ${getBarColor(isEvaluated ? result.staticScore : staticScore, 40)}`} style={{ width: `${((isEvaluated ? result.staticScore : staticScore) / 40) * 100}%` }}></div>
+                  </div>
+                </div>
+
+                <div>
+                  <div className="flex justify-between text-xs font-bold text-slate-600 mb-1">
+                    <span>对话表现 (动态)</span>
+                    <span>{isEvaluated ? result.dynamicScore : 0} / 60</span>
+                  </div>
+                  <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
+                    <div className={`h-full ${isEvaluated ? getBarColor(result.dynamicScore, 60) : 'bg-gray-300'}`} style={{ width: `${isEvaluated ? (result.dynamicScore / 60) * 100 : 0}%` }}></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Dimensions & Suggestions */}
+          <div className="col-span-7 flex flex-col gap-6">
+            
+            {/* Dimensions */}
+            <div>
+              <h3 className="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2">
+                <svg className="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                {isEvaluated ? '动态表现分析' : '基础配置建议'}
+              </h3>
+              <div className="space-y-4">
+                {isEvaluated ? (
+                  result.dimensions.map((dim, idx) => (
+                    <div key={idx} className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm hover:border-blue-200 transition-colors">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-bold text-slate-700">{dim.name}</span>
+                        <span className={`text-xs font-bold px-2 py-0.5 rounded ${getScoreColor(dim.score)}`}>{dim.score} / 20</span>
+                      </div>
+                      <p className="text-xs text-slate-500 leading-relaxed">{dim.analysis}</p>
+                    </div>
+                  ))
+                ) : (
+                  <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
+                    {staticTips.length > 0 ? (
+                      <ul className="space-y-3">
+                        {staticTips.map((tip, idx) => (
+                          <li key={idx} className="flex items-start gap-3 text-sm text-slate-700">
+                            <span className="w-5 h-5 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">{idx + 1}</span>
+                            <span className="leading-relaxed">{tip}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-sm text-emerald-600 font-medium flex items-center gap-2">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                        基础配置很完善！请进行对话测试以解锁动态评测。
+                      </p>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Suggestions */}
+            {isEvaluated && (
+              <div>
+                <h3 className="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2">
+                  <svg className="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
+                  AI 调优建议
+                </h3>
+                <div className="bg-amber-50 border border-amber-100 rounded-xl p-5">
+                  {result.suggestions.length > 0 ? (
+                    <ul className="space-y-3">
+                      {result.suggestions.map((sug, idx) => (
+                        <li key={idx} className="flex items-start gap-3 text-sm text-slate-700">
+                          <span className="w-5 h-5 rounded-full bg-amber-200 text-amber-700 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">{idx + 1}</span>
+                          <span className="leading-relaxed">{sug}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-sm text-slate-600 italic">当前表现完美，暂无调优建议。</p>
+                  )}
+                </div>
+              </div>
+            )}
+
+          </div>
+        </div>
+        
+        {/* Footer */}
+        <div className="h-16 border-t border-gray-100 bg-gray-50 flex items-center justify-end px-6 shrink-0 gap-3">
+          <button onClick={onClose} className="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-800 hover:bg-gray-100 rounded-lg transition-colors">
+            关闭
+          </button>
+          <button onClick={onClose} className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm shadow-blue-200 transition-colors">
+            去优化配置
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default EvaluationReportModal;
