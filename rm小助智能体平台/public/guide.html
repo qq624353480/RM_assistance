@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RM 小助 - 新人上手指南</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --text-main: #1e293b;
+            --text-secondary: #475569;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-main);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 16px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+
+        .section {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-top: 0;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .step-number {
+            background: var(--primary-color);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-top: 24px;
+            margin-bottom: 12px;
+        }
+
+        p {
+            margin-bottom: 16px;
+            color: var(--text-secondary);
+        }
+
+        ul {
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+
+        .highlight-box {
+            background: #eff6ff;
+            border-left: 4px solid var(--primary-color);
+            padding: 16px;
+            border-radius: 0 8px 8px 0;
+            margin: 20px 0;
+        }
+
+        .concept-card {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .concept-item {
+            flex: 1;
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .concept-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        code {
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9em;
+            color: #0f172a;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>RM 小助 - 新人上手指南</h1>
+            <p class="subtitle">5 分钟快速掌握银行智能体配置流程</p>
+        </header>
+
+        <!-- 第一部分：运行逻辑 -->
+        <div class="section">
+            <h2>
+                <span class="step-number">1</span>
+                智能体是如何工作的？
+            </h2>
+            <p>在 RM 小助平台上，您配置的智能体不仅仅是一个聊天机器人，它是一个<strong>“懂业务、守规矩”</strong>的数字员工。它的运行核心基于以下三个要素：</p>
+            
+            <div class="concept-card">
+                <div class="concept-item">
+                    <span class="concept-title">🧠 大脑 (Prompt)</span>
+                    <p>通过您编写的<strong>提示词</strong>，定义智能体的身份（如“理财经理”）、任务（如“推荐产品”）和语气。</p>
+                </div>
+                <div class="concept-item">
+                    <span class="concept-title">📚 知识 (RAG)</span>
+                    <p>通过挂载<strong>业务文档</strong>，让智能体在回答时能查阅准确的产品条款，避免“胡说八道”。</p>
+                </div>
+                <div class="concept-item">
+                    <span class="concept-title">👁️ 感知 (Context)</span>
+                    <p>智能体能实时读取<strong>客户数据</strong>（如风险等级、资产规模），从而给出个性化的建议。</p>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <strong>核心原理：</strong> 当用户提问时，平台会将您的<strong>提示词</strong> + <strong>文档知识</strong> + <strong>客户数据</strong> 打包成一个完整的指令发送给 AI，确保它生成的回答既专业又合规。
+            </div>
+        </div>
+
+        <!-- 第二部分：操作流程 -->
+        <div class="section">
+            <h2>
+                <span class="step-number">2</span>
+                从零搭建您的第一个智能体
+            </h2>
+            
+            <h3>第一步：定义身份 (Basic Info)</h3>
+            <p>在左侧面板填写智能体的基本信息。最关键的是<strong>核心提示词 (Instructions)</strong>。</p>
+            <ul>
+                <li><strong>技巧：</strong> 明确告诉它“你是谁”、“你要做什么”、“你不能做什么”。</li>
+                <li><strong>示例：</strong> <code>你是一个专业的银行理财经理。你的任务是根据客户的风险等级推荐产品。严禁向 R1 客户推荐 R3 以上的高风险理财。</code></li>
+            </ul>
+
+            <h3>第二步：挂载知识 (Knowledge)</h3>
+            <p>上传业务文档（PDF/Word），让智能体“有书可查”。</p>
+            <ul>
+                <li><strong>场景：</strong> 上传《2024理财产品手册》，当客户问“稳盈宝收益率多少”时，智能体能准确回答。</li>
+            </ul>
+
+            <h3>第三步：配置数据 (Data)</h3>
+            <p>勾选智能体需要用到的客户数据字段。</p>
+            <ul>
+                <li><strong>必选：</strong> 建议勾选 <code>Risk Level</code> (风险等级) 和 <code>AUM</code> (资产规模)，这是合规推荐的基础。</li>
+            </ul>
+
+            <h3>第四步：调试与发布 (Debug & Publish)</h3>
+            <p>在右侧预览窗口进行测试。</p>
+            <ul>
+                <li><strong>切换客户：</strong> 点击底部的客户头像，切换“王富贵（保守型）”或“李小狼（激进型）”，验证智能体对不同客户的回答是否正确。</li>
+                <li><strong>成熟度评测：</strong> 点击顶部的<strong>成熟度徽章</strong>，查看 AI 对您配置的评分和优化建议。</li>
+            </ul>
+        </div>
+
+        <!-- 第三部分：常见问题 -->
+        <div class="section">
+            <h2>
+                <span class="step-number">3</span>
+                常见问题 (FAQ)
+            </h2>
+            
+            <h3>Q: 为什么智能体回答“我不知道”？</h3>
+            <p>A: 可能是因为您没有上传相关的知识文档，或者提示词中限制了它的回答范围。</p>
+
+            <h3>Q: 如何让智能体更像真人？</h3>
+            <p>A: 在提示词中增加语气要求，例如：<code>请使用亲切、专业的口吻，避免使用过于生硬的技术术语。</code></p>
+
+            <h3>Q: 评分低怎么办？</h3>
+            <p>A: 点击成熟度徽章查看详细报告。通常是因为提示词太短、未挂载知识库或未进行足够的对话测试。</p>
+        </div>
+
+        <div class="footer">
+            <p>© 2026 RM 小助智能体配置平台 | 赋能每一位客户经理</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,56 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile and permission status",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "email": { "type": "string", "description": "User email" },
+        "displayName": { "type": "string", "description": "User display name" },
+        "role": { "type": "string", "enum": ["admin", "BRANCH_REGULAR", "BRANCH_ADMIN", "HEAD_REGULAR"], "description": "User role" },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected", "none"], "description": "Permission status" },
+        "orgType": { "type": "string", "enum": ["head", "branch"], "description": "Organization type" },
+        "branchName": { "type": "string", "description": "Specific branch name" },
+        "requestInfo": {
+          "type": "object",
+          "properties": {
+            "department": { "type": "string" },
+            "reason": { "type": "string" },
+            "submittedAt": { "type": "string", "format": "date-time" },
+            "requestedBy": { "type": "string" },
+            "isBulkRequest": { "type": "boolean" }
+          }
+        }
+      },
+      "required": ["uid", "email", "role", "status"]
+    },
+    "Agent": {
+      "title": "Agent",
+      "description": "Agent summary and configuration",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "updatedAt": { "type": "number" },
+        "status": { "type": "string", "enum": ["published", "draft"] },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "avatarColor": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "orgType": { "type": "string", "enum": ["head", "branch"] },
+        "branchName": { "type": "string" }
+      }
+    }
+  },
+  "firestore": {
+    "users": {
+      "schema": "User",
+      "description": "Collection of user profiles"
+    },
+    "agents": {
+      "schema": "Agent",
+      "description": "Collection of agents"
+    }
+  }
+}
